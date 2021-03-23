@@ -17,9 +17,11 @@ Use HTTP headers for application passwords instead of basic authentication. Perf
 
 Username header: `X-WP-USERNAME`
 Password header: `X-WP-PASSWORD`
- 
+
+Note that at this point the plugin doesn't actually remove the basic authentication validation for application passwords, but checks the HTTP headers at a higher priority.
+
 ## Changelog
- 
+
 = 1.0.0 =
 * Initial release
  
