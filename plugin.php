@@ -4,7 +4,7 @@
  * Description: Allows sending application passwords using HTTP headers instead of basic authentication
  * Author: Cameron Jones
  * Author URI: https://cameronjonesweb.com.au
- * Version: 1.0.0
+ * Version: 1.0.1
  * License: GPLv2
  *
  * @package http-header-authentication-for-application-passwords

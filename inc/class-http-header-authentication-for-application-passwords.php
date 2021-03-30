@@ -11,11 +11,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Main plugin class
+ *
+ * @since 1.0.0
  */
 class HTTP_Header_Authentication_For_Application_Passwords {
 
 	/**
 	 * Creates a singleton instance of the plugin class.
+	 *
+	 * @since 1.0.0
 	 */
 	public static function get_instance() {
 		static $inst = null;
@@ -34,6 +38,8 @@ class HTTP_Header_Authentication_For_Application_Passwords {
 
 	/**
 	 * Set up the plugin
+	 *
+	 * @since 1.0.0
 	 */
 	public function bootstrap() {
 		$this->hooks();
@@ -41,16 +47,19 @@ class HTTP_Header_Authentication_For_Application_Passwords {
 
 	/**
 	 * Add initial hooks
+	 *
+	 * @since 1.0.0
 	 */
 	public function hooks() {
 		add_filter( 'determine_current_user', array( $this, 'validate_application_password' ), 19 );
+		add_filter( 'wp_is_site_protected_by_basic_auth', array( $this, 'allow_adding_application_passwords' ) );
 	}
 
 	/**
 	 * Validates the application password credentials passed via HTTP headers.
 	 * Required as some sites are already protected by Basic Auth and therefore won't work out of the box
 	 *
-	 * @since 5.6.0
+	 * @since 1.0.0
 	 *
 	 * @param int|false $input_user User ID if one has been determined, false otherwise.
 	 * @return int|false The authenticated user ID if successful, false otherwise.
@@ -79,6 +88,22 @@ class HTTP_Header_Authentication_For_Application_Passwords {
 
 		// If it wasn't a user what got returned, just pass on what we had received originally.
 		return $input_user;
+	}
+
+	/**
+	 * Trick WordPress into thinking that the site isn't behind basic auth on the edit user screen so passwords can actually be created.
+	 *
+	 * @since 1.0.1
+	 *
+	 * @param bool $is_protected Whether the site is protected by Basic Auth.
+	 * @return bool
+	 */
+	public function allow_adding_application_passwords( $is_protected ) {
+		$screen = get_current_screen();
+		if ( 'profile' === $screen->id ) {
+			$is_protected = false;
+		}
+		return $is_protected;
 	}
 
 }
